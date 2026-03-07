@@ -1,0 +1,8 @@
+@theme {
+    /* === 元件陰影與濾鏡映射 Component Shadow & Blurs Semantics === */
+    --shadow-panel: var(--shadow-soft-lg);
+    --shadow-dialog: var(--shadow-soft-lg);
+
+    --blur-overlay: var(--blur-sm);
+    /* 用於彈出視窗背後的毛玻璃 */
+}

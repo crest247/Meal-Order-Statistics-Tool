@@ -1,0 +1,14 @@
+@theme {
+    /* === 元件圓角映射 Component Radius Semantics === */
+    --radius-panel: var(--radius-4xl);
+    /* 32px */
+    --radius-dialog: var(--radius-3xl);
+    /* 28px */
+    --radius-list-item: var(--radius-xl);
+    /* 16px */
+
+    --radius-input: var(--radius-sm);
+    /* 4px */
+
+    --radius-badge: var(--radius-full);
+}

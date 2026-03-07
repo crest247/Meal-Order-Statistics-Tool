@@ -1,0 +1,9 @@
+@theme {
+    /* === 元件字體排版映射 Component Typography Semantics === */
+
+    /* 這裡作為一個示範：把原本 Tailwind 的固定值，轉化為元件系統的階層 */
+    --text-dialog-title: var(--text-2xl);
+    --text-list-item-title: var(--text-lg);
+    --text-list-item-body: var(--text-sm);
+    --text-input-body: var(--text-base);
+}

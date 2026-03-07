@@ -1,0 +1,46 @@
+@theme {
+    /* === 元件色彩映射 Component Color Semantics === */
+
+    /* Button */
+    --color-btn-primary-bg: var(--color-primary);
+    --color-btn-primary-text: var(--color-on-primary, #fff);
+    --color-btn-secondary-bg: var(--color-secondary);
+    --color-btn-secondary-text: var(--color-on-secondary, #fff);
+    --color-btn-ghost-hover-bg: color-mix(in oklch, var(--color-on-surface) 5%, transparent);
+
+    /* Card */
+    --color-card-primary-bg: var(--color-primary-container);
+    --color-card-primary-border: color-mix(in oklch, var(--color-primary) 10%, transparent);
+    --color-card-secondary-bg: var(--color-secondary-container);
+    --color-card-secondary-border: color-mix(in oklch, var(--color-secondary) 10%, transparent);
+    --color-card-surface-bg: var(--color-surface);
+    --color-card-surface-border: var(--color-outline-variant);
+
+    /* Badge */
+    --color-badge-primary-bg: var(--color-primary);
+    --color-badge-secondary-bg: var(--color-secondary);
+    --color-badge-error-bg: var(--color-error);
+    --color-badge-outline-bg: var(--color-secondary-fixed);
+    --color-badge-outline-border: color-mix(in oklch, var(--color-secondary) 10%, transparent);
+    --color-badge-outline-text: var(--color-secondary);
+
+    /* List Items */
+    --color-list-item-order-bg: var(--color-secondary-surface);
+    --color-list-item-draft-primary-bg: var(--color-primary-surface);
+    --color-list-item-border: var(--color-outline-variant);
+
+    /* Input & Select */
+    --color-input-border: var(--color-outline);
+    --color-input-border-focus: var(--color-primary);
+    --color-input-border-error: var(--color-error);
+    --color-input-text: var(--color-on-surface);
+    --color-input-label: var(--color-on-surface-variant);
+    --color-input-label-focus: var(--color-primary);
+
+    /* Quantity Selector */
+    --color-quantity-selector-container-bg: var(--color-primary-container);
+    --color-quantity-selector-border: var(--color-outline-variant);
+    --color-quantity-selector-bg: color-mix(in oklch, var(--color-primary) 6%, transparent);
+    --color-quantity-selector-btn-hover: color-mix(in oklch, var(--color-primary) 10%, transparent);
+    --color-quantity-selector-text: var(--color-primary);
+}

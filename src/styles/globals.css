@@ -1,0 +1,50 @@
+/* === 全域工具與重寫 Global Utilities & Overrides === */
+
+@layer utilities {
+
+    /* --- 佈局元件 Layout Components --- */
+    .bg-app-base {
+        background-color: var(--color-bg-base);
+    }
+
+    .panel-soft {
+        background-color: var(--color-bg-panel);
+        border-radius: var(--radius-panel);
+        box-shadow: var(--shadow-panel);
+        border: 1px solid color-mix(in oklch, var(--color-on-surface) 4%, transparent);
+    }
+
+    .dialog-surface {
+        border-radius: var(--radius-dialog);
+        box-shadow: var(--shadow-dialog);
+        overflow: hidden;
+    }
+
+    .list-item-surface {
+        border-radius: var(--radius-list-item);
+    }
+
+    .scrim-blur {
+        backdrop-filter: var(--blur-overlay);
+    }
+}
+
+/* --- 原生元素重寫 Native Element Overrides --- */
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--color-outline-variant);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-outline);
+}
