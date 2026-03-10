@@ -8,13 +8,12 @@ import { PageLayout, GridLayout } from './components/ui/Layout';
 import { useMenu } from './hooks/useMenu';
 import { useOrders } from './hooks/useOrders';
 import { useOrderDraft } from './hooks/useOrderDraft';
-import { generateId } from './utils/helpers';
 
 export default function App() {
   const { globalMeals, isLoadingMenu } = useMenu();
   const {
     fillerName, setFillerName,
-    selectedMealId, setSelectedMealId,
+    selectedMealName, setSelectedMealName,
     currentQuantity, setCurrentQuantity,
     fillerDraftList,
     fillerNameError, setFillerNameError,
@@ -58,8 +57,11 @@ export default function App() {
     setSelectedMealError(false);
 
     const newOrder: UserOrder = {
-      id: generateId(),
       filler_name: fillerName.trim(),
+      timestamp: (() => {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+      })(),
       items: fillerDraftList,
       total_price: fillerTotalPrice,
     };
@@ -95,8 +97,8 @@ export default function App() {
           fillerName={fillerName}
           setFillerName={setFillerName}
           fillerNameError={fillerNameError}
-          selectedMealId={selectedMealId}
-          setSelectedMealId={setSelectedMealId}
+          selectedMealName={selectedMealName}
+          setSelectedMealName={setSelectedMealName}
           selectedMealError={selectedMealError}
           currentQuantity={currentQuantity}
           setCurrentQuantity={setCurrentQuantity}

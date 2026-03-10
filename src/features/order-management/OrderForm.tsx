@@ -22,8 +22,8 @@ interface OrderFormProps {
     setFillerName: (name: string) => void;
     fillerNameError: boolean;
 
-    selectedMealId: string;
-    setSelectedMealId: (id: string) => void;
+    selectedMealName: string;
+    setSelectedMealName: (name: string) => void;
     selectedMealError: boolean;
 
     currentQuantity: number;
@@ -43,8 +43,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     fillerName,
     setFillerName,
     fillerNameError,
-    selectedMealId,
-    setSelectedMealId,
+    selectedMealName,
+    setSelectedMealName,
     selectedMealError,
     currentQuantity,
     setCurrentQuantity,
@@ -54,7 +54,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     onSubmit,
     totalPrice,
 }) => {
-    const selectedMeal = useMemo(() => meals.find(m => m.id === selectedMealId) || null, [selectedMealId, meals]);
+    const selectedMeal = useMemo(() => meals.find(m => m.name === selectedMealName) || null, [selectedMealName, meals]);
 
     return (
         <Card variant="primary" className="h-fit">
@@ -75,8 +75,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     id="meal_selector"
                     label="選擇餐點"
                     labelBg="bg-primary-container"
-                    value={selectedMealId}
-                    onChange={(e) => setSelectedMealId(e.target.value)}
+                    value={selectedMealName}
+                    onChange={(e) => setSelectedMealName(e.target.value)}
                     error={selectedMealError}
                     helperText="請選擇餐點"
                     disabled={isLoadingMenu || meals.length === 0}
@@ -89,7 +89,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         <>
                             <option value="" disabled className="font-sans">請選擇餐點</option>
                             {meals.map(meal => (
-                                <option key={meal.id} value={meal.id}>
+                                <option key={meal.name} value={meal.name}>
                                     {padMealName(meal.name)} ${String(meal.price).padStart(3, '\u00A0')}
                                 </option>
                             ))}

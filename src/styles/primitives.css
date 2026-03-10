@@ -2,22 +2,22 @@
     /* === 原始色票 Primitive Colors === */
     /* --- Material 3 Base Roles --- */
     --color-surface: oklch(100% 0 0);
-    --color-on-surface: oklch(15% 0.02 290);
-    --color-on-surface-variant: oklch(40% 0.05 290);
-    --color-outline: oklch(50% 0.03 290);
-    --color-outline-variant: oklch(80% 0.02 290);
+    --color-on-surface: oklch(15% 0.02 300);
+    --color-on-surface-variant: oklch(40% 0.05 300);
+    --color-outline: oklch(50% 0.03 300);
+    --color-outline-variant: oklch(80% 0.02 300);
     --color-error: oklch(45% 0.2 25);
 
     /* --- Primary Color Scheme (Purple) --- */
-    --color-primary: oklch(45% 0.15 290);
-    --color-primary-container: oklch(98% 0.01 290);
-    --color-primary-surface: oklch(98% 0.05 290);
+    --color-primary: oklch(45% 0.15 300);
+    --color-primary-container: oklch(98% 0.01 300);
+    --color-primary-surface: oklch(96% 0.02 300);
 
     /* --- Secondary Color Scheme (Green) --- */
     --color-secondary: oklch(45% 0.15 150);
     --color-secondary-container: oklch(98% 0.01 150);
-    --color-secondary-surface: oklch(98% 0.05 150);
-    --color-secondary-fixed: oklch(88% 0.1 150);
+    --color-secondary-surface: oklch(96% 0.02 150);
+    --color-secondary-fixed: oklch(96% 0.06 150);
 
     /* --- Background Additions (Pure Gray) --- */
     --color-bg-base: oklch(96% 0 0);

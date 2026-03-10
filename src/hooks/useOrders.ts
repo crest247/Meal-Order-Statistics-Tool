@@ -14,8 +14,8 @@ export function useOrders(onResetForm?: () => void) {
                 const data = await apiService.fetchInitData();
                 if (data.success && data.orders) {
                     const mappedOrders: UserOrder[] = data.orders.map((o: any) => ({
-                        id: o.id,
                         filler_name: o.filler_name,
+                        timestamp: o.timestamp,
                         total_price: o.total_price,
                         items: o.items || [],
                         _summary: o.items_summary || '無餐點明細'
@@ -53,14 +53,14 @@ export function useOrders(onResetForm?: () => void) {
         }
     };
 
-    const handleDeleteOrder = async (id: string) => {
+    const handleDeleteOrder = async (fillerName: string, timestamp: string) => {
         if (!window.confirm('確定要刪除這筆訂單嗎？')) return;
 
-        setDeletingId(id);
+        setDeletingId(`${fillerName}-${timestamp}`);
         try {
-            const data = await apiService.deleteOrder(id);
+            const data = await apiService.deleteOrder(fillerName, timestamp);
             if (data.success) {
-                setAllUsersOrders(prev => prev.filter(o => o.id !== id));
+                setAllUsersOrders(prev => prev.filter(o => !(o.filler_name === fillerName && o.timestamp === timestamp)));
             } else {
                 alert('刪除失敗: ' + (data.error || '未知錯誤'));
             }
@@ -77,7 +77,11 @@ export function useOrders(onResetForm?: () => void) {
         try {
             const data = await apiService.updateOrder(updatedOrder);
             if (data.success) {
-                setAllUsersOrders(prev => prev.map(o => o.id === updatedOrder.id ? updatedOrder : o));
+                // 重新載入數據，因為編輯後時間戳已更新
+                const initData = await apiService.fetchInitData();
+                if (initData.success && initData.orders) {
+                    setAllUsersOrders(initData.orders);
+                }
                 return true;
             } else {
                 alert('更新失敗: ' + (data.error || '未知錯誤'));

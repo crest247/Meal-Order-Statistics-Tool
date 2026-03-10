@@ -15,7 +15,7 @@ interface OrderSummaryProps {
     isLoading: boolean;
     deletingId: string | null;
     onEdit: (order: UserOrder) => void;
-    onDelete: (id: string) => void;
+    onDelete: (fillerName: string, timestamp: string) => void;
 }
 
 export const OrderSummary: React.FC<OrderSummaryProps> = ({
@@ -75,9 +75,9 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
                             ) : (
                                 orders.map(order => (
                                     <OrderListItem
-                                        key={order.id}
+                                        key={`${order.filler_name}-${order.timestamp}`}
                                         order={order}
-                                        isDeleting={deletingId === order.id}
+                                        isDeleting={deletingId === `${order.filler_name}-${order.timestamp}`}
                                         onEdit={onEdit}
                                         onDelete={onDelete}
                                     />

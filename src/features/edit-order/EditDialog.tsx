@@ -30,13 +30,13 @@ export const EditDialog: React.FC<EditDialogProps> = ({
     const [name, setName] = useState(order.filler_name);
     const [draftList, setDraftList] = useState<DraftItem[]>(order.items);
 
-    const [selectedMealId, setSelectedMealId] = useState<string>('');
+    const [selectedMealName, setSelectedMealName] = useState<string>('');
     const [currentQuantity, setCurrentQuantity] = useState(1);
 
     const [nameError, setNameError] = useState(false);
     const [mealError, setMealError] = useState(false);
 
-    const selectedMeal = useMemo(() => meals.find(m => m.id === selectedMealId) || null, [selectedMealId, meals]);
+    const selectedMeal = useMemo(() => meals.find(m => m.name === selectedMealName) || null, [selectedMealName, meals]);
 
     const totalPrice = useMemo(() => {
         return draftList.reduce((sum, item) => sum + item.subtotal, 0);
@@ -57,7 +57,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({
             subtotal: selectedMeal.price * currentQuantity,
         };
         setDraftList(prev => [...prev, newItem]);
-        setSelectedMealId('');
+        setSelectedMealName('');
         setCurrentQuantity(1);
     };
 
@@ -116,8 +116,8 @@ export const EditDialog: React.FC<EditDialogProps> = ({
                                 id="edit_meal_sel"
                                 label="選擇餐點"
                                 labelBg="bg-primary-surface"
-                                value={selectedMealId}
-                                onChange={(e) => setSelectedMealId(e.target.value)}
+                                value={selectedMealName}
+                                onChange={(e) => setSelectedMealName(e.target.value)}
                                 error={mealError}
                                 helperText="請選擇餐點"
                                 disabled={meals.length === 0}
@@ -128,7 +128,7 @@ export const EditDialog: React.FC<EditDialogProps> = ({
                                     <>
                                         <option value="" disabled className="font-sans">請選擇餐點</option>
                                         {meals.map(meal => (
-                                            <option key={meal.id} value={meal.id}>
+                                            <option key={meal.name} value={meal.name}>
                                                 {padMealName(meal.name)} ${String(meal.price).padStart(3, '\u00A0')}
                                             </option>
                                         ))}

@@ -50,11 +50,10 @@ function getMenuData(ss) {
   const items = [];
   for (let i = HEADER_ROW_COUNT; i < data.length; i++) {
     const row = data[i];
-    if (row[1]) { // B 欄為餐點名稱
+    if (row[0]) { // A 欄為餐點名稱
       items.push({
-        id: String(row[0]),
-        name: String(row[1]),
-        price: Number(row[2])
+        name: String(row[0]),
+        price: Number(row[1])
       });
     }
   }
@@ -74,28 +73,32 @@ function getOrdersData(ss) {
 
   for (let i = HEADER_ROW_COUNT; i < data.length; i++) {
     const row = data[i];
-    const orderId = String(row[0]);
-    if (!orderId) continue;
+    const orderTimestamp = row[0] instanceof Date ? row[0].toISOString().slice(0, 19).replace('T', ' ') : String(row[0]);
+    const fillerName = String(row[1]);
+    const key = fillerName + '_' + orderTimestamp;
+    if (!orderTimestamp) continue;
 
-    if (!orderMap[orderId]) {
-      orderMap[orderId] = {
-        id: orderId,
-        timestamp: row[1],
-        filler_name: String(row[2]),
-        total_price: Number(row[6]), // G 欄 (Index 6)
+    if (!orderMap[key]) {
+      orderMap[key] = {
+        timestamp: orderTimestamp,
+        filler_name: fillerName,
+        total_price: Number(row[5]), // F 欄 (Index 5)
         items: [],
         items_summary_parts: []
       };
-      // 嘗試解析原始 JSON
-      if (row[7]) {
-        try {
-          orderMap[orderId].items = JSON.parse(String(row[7]));
-        } catch (e) { }
-      }
     }
-    // 收集品項摘要 (D, E 欄位)
-    if (row[3]) {
-      orderMap[orderId].items_summary_parts.push(String(row[3]) + " × " + String(row[4]));
+    // 從每行重建 item
+    if (row[2] && row[3] && row[4]) {
+      const quantity = Number(row[3]);
+      const subtotal = Number(row[4]);
+      const price = subtotal / quantity;
+      orderMap[key].items.push({
+        id: 'item-' + i,
+        meal: { name: String(row[2]), price: price },
+        quantity: quantity,
+        subtotal: subtotal
+      });
+      orderMap[key].items_summary_parts.push(String(row[2]) + " × " + String(row[3]));
     }
   }
 
@@ -112,15 +115,18 @@ function getOrdersData(ss) {
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
-    const order_id = payload.id;
+    const filler_name = payload.filler_name;
+    const timestamp = payload.timestamp; // 用於刪除舊記錄
 
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SUMMARY_SHEET_NAME);
     if (!sheet) return respond({ success: false, error: "OrdersSummary sheet not found" });
 
-    // 1. 先刪除所有具有相同 order_id 的舊列 (如果是編輯更新或直接刪除)
+    // 1. 先刪除所有具有相同 filler_name 和 timestamp 的舊列 (如果是編輯更新或直接刪除)
+    const HEADER_ROW_COUNT = 1;
     const data = sheet.getDataRange().getValues();
-    for (let i = data.length - 1; i >= 0; i--) {
-      if (String(data[i][0]) === String(order_id)) {
+    for (let i = data.length - 1; i >= HEADER_ROW_COUNT; i--) {
+      const rowTimestamp = data[i][0] instanceof Date ? data[i][0].toISOString().slice(0, 19).replace('T', ' ') : String(data[i][0]);
+      if (rowTimestamp === timestamp && String(data[i][1]) === filler_name) {
         sheet.deleteRow(i + 1);
       }
     }
@@ -131,23 +137,19 @@ function doPost(e) {
     }
 
     // 3. 逐行寫入新資料 (提交或更新)
-    const filler_name = payload.filler_name;
     const items = payload.items;
     const grand_total = payload.total_price;
-    const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd HH:mm:ss");
-    const rawItemsJson = JSON.stringify(items);
+    const newTimestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd HH:mm:ss"); // 編輯時更新時間
 
-    // 欄位: A:ID, B:時間, C:姓名, D:餐點, E:數量, F:小計, G:總計, H:RawJSON
+    // 欄位: A:時間, B:姓名, C:餐點, D:數量, E:小計, F:總計
     items.forEach(function (item) {
       sheet.appendRow([
-        order_id,
-        timestamp,
+        newTimestamp,
         filler_name,
         item.meal.name,
         item.quantity,
         item.subtotal,
-        grand_total,
-        rawItemsJson
+        grand_total
       ]);
     });
 

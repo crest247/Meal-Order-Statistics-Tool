@@ -4,7 +4,7 @@ import { generateId } from '../utils/helpers';
 
 export function useOrderDraft(globalMeals: Meal[]) {
     const [fillerName, setFillerName] = useState('');
-    const [selectedMealId, setSelectedMealId] = useState<string>('');
+    const [selectedMealName, setSelectedMealName] = useState<string>('');
     const [currentQuantity, setCurrentQuantity] = useState(1);
     const [fillerDraftList, setFillerDraftList] = useState<DraftItem[]>([]);
 
@@ -17,7 +17,7 @@ export function useOrderDraft(globalMeals: Meal[]) {
     }, [fillerDraftList]);
 
     const handleAddToDraft = () => {
-        const selectedMeal = globalMeals.find(m => m.id === selectedMealId);
+        const selectedMeal = globalMeals.find(m => m.name === selectedMealName);
         if (!selectedMeal) {
             setSelectedMealError(true);
             return;
@@ -33,7 +33,7 @@ export function useOrderDraft(globalMeals: Meal[]) {
         };
 
         setFillerDraftList(prev => [...prev, newItem]);
-        setSelectedMealId('');
+        setSelectedMealName('');
         setCurrentQuantity(1);
     };
 
@@ -44,7 +44,7 @@ export function useOrderDraft(globalMeals: Meal[]) {
     const resetDraft = () => {
         setFillerName('');
         setFillerDraftList([]);
-        setSelectedMealId('');
+        setSelectedMealName('');
         setCurrentQuantity(1);
         setFillerNameError(false);
         setSelectedMealError(false);
@@ -53,8 +53,8 @@ export function useOrderDraft(globalMeals: Meal[]) {
     return {
         fillerName,
         setFillerName,
-        selectedMealId,
-        setSelectedMealId,
+        selectedMealName,
+        setSelectedMealName,
         currentQuantity,
         setCurrentQuantity,
         fillerDraftList,

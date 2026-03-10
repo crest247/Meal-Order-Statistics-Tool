@@ -12,7 +12,7 @@ interface OrderListItemProps {
     order: UserOrder;
     isDeleting: boolean;
     onEdit: (order: UserOrder) => void;
-    onDelete: (id: string) => void;
+    onDelete: (fillerName: string, timestamp: string) => void;
 }
 
 export const OrderListItem: React.FC<OrderListItemProps> = ({
@@ -26,7 +26,7 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({
             className={`bg-list-item-order-bg list-item-surface p-4 shadow-sm border border-list-item-border relative transition-opacity ${isDeleting ? 'opacity-50 pointer-events-none' : ''}`}
         >
             {isDeleting && (
-                <Scrim absolute blur={false} darken={false} className="bg-white/20 list-item-surface">
+                <Scrim absolute blur={false} darken={false} className="bg-white/10">
                     <Stack align="center" gap={2}>
                         <LoadingSpinner size={24} className="text-secondary" />
                         <Typography variant="caption" color="secondary">同步刪除中...</Typography>
@@ -56,7 +56,7 @@ export const OrderListItem: React.FC<OrderListItemProps> = ({
                             variant="ghost"
                             color="error"
                             isIcon
-                            onClick={() => onDelete(order.id)}
+                            onClick={() => onDelete(order.filler_name, order.timestamp)}
                             aria-label="刪除訂單"
                         >
                             <Trash2 size={18} />

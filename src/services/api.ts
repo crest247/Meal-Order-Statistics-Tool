@@ -22,7 +22,11 @@ export const apiService = {
             return { success: true, items: [], orders: [] };
         }
         const res = await fetch(`${APP_SCRIPT_WEB_APP_URL}?action=init`);
-        return await res.json();
+        const data = await res.json();
+        if (!data.success) {
+            alert('獲取資料失敗: ' + (data.error || '未知錯誤'));
+        }
+        return data;
     },
 
     async submitOrder(order: UserOrder): Promise<ApiResult> {
@@ -37,14 +41,14 @@ export const apiService = {
         return await response.json();
     },
 
-    async deleteOrder(id: string): Promise<ApiResult> {
+    async deleteOrder(fillerName: string, timestamp: string): Promise<ApiResult> {
         if (isLocalOnly) {
             return { success: true, message: 'Local only: Order deleted from memory' };
         }
         const response = await fetch(APP_SCRIPT_WEB_APP_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ id, delete: true }),
+            body: JSON.stringify({ filler_name: fillerName, timestamp, delete: true }),
         });
         return await response.json();
     },
